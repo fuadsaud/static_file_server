@@ -2,9 +2,13 @@ module Sockettp
   module Client
     class << self
       def request(args)
-        socket = TCPSocket.new '0.0.0.0', Sockettp::PORT
+        uri = URI(args)
 
-        socket.puts args
+        fail URI::BadURIError if !uri.is_a? URI::Sockettp
+
+        socket = TCPSocket.new uri.host, uri.port
+
+        socket.puts uri.path
 
         response = socket.gets
 

@@ -9,6 +9,6 @@ end
 task :client do
   loop do
     print '>> '
-    puts Sockettp::Client.request(STDIN.gets.chomp)
+    puts Sockettp::Client.request("sockettp://0.0.0.0/#{STDIN.gets.chomp}")
   end
 end

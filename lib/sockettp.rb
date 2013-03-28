@@ -4,8 +4,14 @@ require 'socket'
 require 'colored'
 
 module Sockettp
-  PORT = 9000
-
   require 'sockettp/client'
   require 'sockettp/server'
+end
+
+module URI
+  class Sockettp < Generic
+    DEFAULT_PORT = 9000
+  end
+
+  @@schemes['SOCKETTP'] = Sockettp
 end
