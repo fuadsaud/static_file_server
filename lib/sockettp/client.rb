@@ -14,7 +14,7 @@ module Sockettp
 
         socket.close
 
-        response
+        JSON.parse(response)
       end
     end
   end

@@ -33,7 +33,7 @@ module Sockettp
 
           response = File.read(File.join(@dir, input))
 
-          client.puts({ status: 'OK', response: response })
+          client.puts(status: 'OK', response: response.to_json)
         end
       end
     end

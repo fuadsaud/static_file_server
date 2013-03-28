@@ -1,5 +1,6 @@
 $:.unshift File.dirname(__FILE__) # For testing
 
+require 'json'
 require 'socket'
 require 'colored'
 
