@@ -6,9 +6,10 @@ module Sockettp
 
     def start
       puts "Starting Sockettp server"
-      puts "Serving #{@dir.yellow} on port #{Sockettp::PORT.to_s.green}"
 
-      socket = TCPServer.new Sockettp::PORT
+      socket = TCPServer.new Sockettp::DEFAULT_PORT
+
+      puts "Serving #{@dir.yellow} on port #{socket.addr[1].to_s.green}"
 
       loop do
         client = socket.accept
