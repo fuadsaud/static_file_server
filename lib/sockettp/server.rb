@@ -1,13 +1,14 @@
 module Sockettp
   class Server
-    def initialize(dir)
+    def initialize(dir, port = Sockettp::DEFAULT_PORT)
       @dir = dir
+      @port = port
     end
 
     def start
       puts "Starting Sockettp server"
 
-      socket = TCPServer.new Sockettp::DEFAULT_PORT
+      socket = TCPServer.new @port
 
       puts "Serving #{@dir.yellow} on port #{socket.addr[1].to_s.green}"
 
