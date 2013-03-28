@@ -1,3 +1,5 @@
+require 'date'
+
 module Sockettp
   class Server
     def initialize(dir, port = Sockettp::DEFAULT_PORT)
@@ -24,19 +26,42 @@ module Sockettp
       Thread.new do
         loop do
           if client.eof?
-            puts "#{'-' * 100} end connection"
+            # puts "#{'-' * 100} end connection"
             Thread.exit
           end
 
           input = client.gets.chomp
 
-          puts "REQUEST from #{client.addr.last}: #{input}"
+          print "#{DateTime.now.to_s} -- #{client.addr.last}: #{input}"
 
-          response = File.read(File.join(@dir, input))
+          body = content_for(input)
 
-          client.puts(status: 'OK', response: response.to_json)
+          response = {}
+
+          if body
+            response.merge!({
+              status: 200,
+              body: body
+            })
+          else
+            response.merge!({
+              status: 404,
+              body: Sockettp::STATUSES[404]
+            })
+          end
+
+          puts " -- #{response[:status]} #{Sockettp::STATUSES[response[:status]]}".send(response[:status] == 200 ? :green : :red)
+
+          client.puts(response.to_json)
         end
       end
+    end
+
+    def content_for(path)
+      path = File.join(@dir, path)
+
+      return File.read(path) if File.file?(path)
+      return Dir["#{path}/*"] if File.directory?(path)
     end
   end
 end

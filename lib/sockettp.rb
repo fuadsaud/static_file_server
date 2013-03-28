@@ -5,6 +5,11 @@ require 'socket'
 require 'colored'
 
 module Sockettp
+  STATUSES = {
+    200 => 'OK',
+    404 => 'Not found'
+  }
+
   DEFAULT_PORT = 9000
 
   require 'sockettp/client'
