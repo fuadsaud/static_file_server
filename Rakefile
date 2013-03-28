@@ -1,12 +1,12 @@
-task :server do
-  require_relative './lib/sockettp'
+$:.unshift File.expand_path(File.join(File.dirname(__FILE__), 'lib'))
 
+require 'sockettp'
+
+task :server do
   Sockettp::Server.new(ENV['SOCKETTP_DIR']).start
 end
 
 task :client do
-  require_relative './lib/sockettp'
-
   loop do
     print '>> '
     puts Sockettp::Client.request(STDIN.gets.chomp)
