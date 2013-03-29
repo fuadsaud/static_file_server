@@ -14,8 +14,6 @@ module Sockettp
 
         response = socket.gets
 
-        socket.close
-
         JSON.parse(response)
       end
     end
