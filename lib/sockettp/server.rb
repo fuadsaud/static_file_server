@@ -1,4 +1,5 @@
 require 'date'
+require 'timeout'
 
 module Sockettp
   class Server
@@ -17,12 +18,13 @@ module Sockettp
     end
 
     private
-    def handle(client, addrinfo)
-      Thread.new do
+    def handle(socket, addrinfo)
+      Thread.new(socket) do |client|
+        log "New client connected"
         begin
           loop do
             if client.eof?
-              # puts "#{'-' * 100} end connection"
+              puts "#{'-' * 100} end connection"
               break
             end
 
@@ -44,13 +46,13 @@ module Sockettp
               })
             end
 
-            log "#{addrinfo.ip_address}: #{input} -- #{response[:status]} #{Sockettp::STATUSES[response[:status]]}".send(response[:status] == 200 ? :green : :red)
+            log "#{addrinfo.ip_address} #{input} -- #{response[:status]} #{Sockettp::STATUSES[response[:status]]}".send(response[:status] == 200 ? :green : :red)
 
             client.puts(response.to_json)
           end
         ensure
-          # puts 'Close socket bicho'
-          client.close
+          puts 'Closed socket, bicho'
+          socket.close
         end
       end
     end
@@ -63,7 +65,7 @@ module Sockettp
     end
 
     def log(msg)
-      puts "#{DateTime.now.to_s} -- #{msg}"
+      puts "#{Thread.current} -- #{DateTime.now.to_s} -- #{msg}"
     end
   end
 end
