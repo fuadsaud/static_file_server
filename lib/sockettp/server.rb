@@ -8,51 +8,49 @@ module Sockettp
     end
 
     def start
-      puts "Starting Sockettp server"
+      puts "Starting Sockettp server..."
+      puts "Serving #{@dir.yellow} on port #{@port.to_s.green}"
 
-      socket = TCPServer.new @port
-
-      puts "Serving #{@dir.yellow} on port #{socket.addr[1].to_s.green}"
-
-      loop do
-        client = socket.accept
-
-        handle client
+      Socket.tcp_server_loop(@port) do |socket, client_addrinfo|
+        handle socket, client_addrinfo
       end
     end
 
     private
-    def handle(client)
+    def handle(client, addrinfo)
       Thread.new do
-        loop do
-          if client.eof?
-            # puts "#{'-' * 100} end connection"
-            Thread.exit
+        begin
+          loop do
+            if client.eof?
+              # puts "#{'-' * 100} end connection"
+              break
+            end
+
+            input = client.gets.chomp
+
+            body = content_for(input)
+
+            response = {}
+
+            if body
+              response.merge!({
+                status: 200,
+                body: body
+              })
+            else
+              response.merge!({
+                status: 404,
+                body: Sockettp::STATUSES[404]
+              })
+            end
+
+            log "#{addrinfo.ip_address}: #{input} -- #{response[:status]} #{Sockettp::STATUSES[response[:status]]}".send(response[:status] == 200 ? :green : :red)
+
+            client.puts(response.to_json)
           end
-
-          input = client.gets.chomp
-
-          print "#{DateTime.now.to_s} -- #{client.addr.last}: #{input}"
-
-          body = content_for(input)
-
-          response = {}
-
-          if body
-            response.merge!({
-              status: 200,
-              body: body
-            })
-          else
-            response.merge!({
-              status: 404,
-              body: Sockettp::STATUSES[404]
-            })
-          end
-
-          puts " -- #{response[:status]} #{Sockettp::STATUSES[response[:status]]}".send(response[:status] == 200 ? :green : :red)
-
-          client.puts(response.to_json)
+        ensure
+          # puts 'Close socket bicho'
+          client.close
         end
       end
     end
@@ -62,6 +60,10 @@ module Sockettp
 
       return File.read(path) if File.file?(path)
       return Dir["#{path}/*"] if File.directory?(path)
+    end
+
+    def log(msg)
+      puts "#{DateTime.now.to_s} -- #{msg}"
     end
   end
 end
