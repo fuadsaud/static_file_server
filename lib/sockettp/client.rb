@@ -1,6 +1,6 @@
 module Sockettp
   module Client
-    autoload :ConnectionManager, 'sockettp/connection_manager'
+    autoload :ConnectionManager, 'sockettp/client/connection_manager'
 
     class << self
       def request(args)

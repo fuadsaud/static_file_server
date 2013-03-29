@@ -5,10 +5,9 @@ module Sockettp
 
       class << self
         def connect(host, port)
-          puts @@connections
           conn = @@connections[host: host, port: port]
 
-          if conn.nil? || conn.closed?
+          if conn.nil?
             @@connections[host: host, port: port] = TCPSocket.new host, port
           else
             conn
