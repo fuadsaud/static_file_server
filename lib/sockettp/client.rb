@@ -1,12 +1,14 @@
 module Sockettp
   module Client
+    autoload :ConnectionManager, 'sockettp/connection_manager'
+
     class << self
       def request(args)
         uri = URI(args)
 
         fail URI::BadURIError if !uri.is_a? URI::Sockettp
 
-        socket = TCPSocket.new uri.host, uri.port
+        socket = ConnectionManager.connect uri.host, uri.port
 
         socket.puts uri.path
 

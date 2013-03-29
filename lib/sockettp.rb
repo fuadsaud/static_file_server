@@ -12,8 +12,8 @@ module Sockettp
 
   DEFAULT_PORT = 9000
 
-  require 'sockettp/client'
-  require 'sockettp/server'
+  autoload :Client, 'sockettp/client'
+  autoload :Server, 'sockettp/server'
 end
 
 module URI
