@@ -4,7 +4,7 @@ require 'sockettp'
 require 'json'
 
 task :server do
-  Sockettp::Server.new(ENV['SOCKETTP_DIR']).start
+  Sockettp::Server.start(ENV['SOCKETTP_DIR'])
 end
 
 task :client do
