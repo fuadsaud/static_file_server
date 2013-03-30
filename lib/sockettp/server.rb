@@ -23,9 +23,11 @@ module Sockettp
         log "New client connected"
         begin
           loop do
-            if client.eof?
-              puts "#{'-' * 100} end connection"
-              break
+            Timeout.timeout(5) do
+              if client.eof?
+                puts "#{'-' * 100} end connection"
+                break
+              end
             end
 
             input = client.gets.chomp
@@ -50,6 +52,8 @@ module Sockettp
 
             client.puts(response.to_json)
           end
+        rescue Timeout::Error
+          log 'Client disconnected for inactivity'
         ensure
           puts 'Closed socket, bicho'
           socket.close
