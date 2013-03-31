@@ -12,6 +12,8 @@ module Sockettp
 
     class << self
       def start(dir, port = Sockettp::DEFAULT_PORT)
+        fail "#{dir} doesn't exists or is't a directory" if !File.directory?(dir)
+
         @@dir = dir
         @@port = port
 
