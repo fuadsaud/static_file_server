@@ -2,12 +2,27 @@ require 'timeout'
 
 module Sockettp
   module Server
+    #
+    # This class is responsible for dealing with the client socket, reading the
+    # requests, writing the responses and monitoring connection timeouts.
+    #
+    # The response is a JSON encoded string with the status code for the request
+    # and the response body.
+    #
     class ClientHandler
+      #
+      # Receives the client socket and it's addrinfo object
+      #
       def initialize(client, addrinfo)
         @client = client
         @addrinfo = addrinfo
       end
 
+      #
+      # Loops infinely checking if the client is still active (has made a
+      # request), fetches the response content and writes it to the client
+      # stream.
+      #
       def loop!
         loop do
           Timeout.timeout(5) { request? }
@@ -28,14 +43,23 @@ module Sockettp
       end
 
       private
+      #
+      # Check if there's a pending request from the client
+      #
       def request?
         return !@client.eof?
       end
 
+      #
+      # Read the request string from the client
+      #
       def read_request
         @client.gets.chomp
       end
 
+      #
+      # Builds a response hash given the response body
+      #
       def build_response_for(body)
         if body
           { status: 200, body: body }
