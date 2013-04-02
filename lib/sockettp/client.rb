@@ -19,9 +19,13 @@ module Sockettp
 
         socket.puts uri.path
 
-        response = socket.gets
-
-        JSON.parse(response)
+        begin
+          response = socket.gets
+          JSON.parse(response)
+        rescue
+          puts $!
+          raise "Couldn't reach #{uri.host}:#{uri.port}"
+        end
       end
     end
   end
