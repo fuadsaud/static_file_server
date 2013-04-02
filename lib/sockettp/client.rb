@@ -1,6 +1,6 @@
 module Sockettp
   module Client
-    autoload :ConnectionManager, 'sockettp/client/connection_manager'
+    autoload :ConnectionFactory, 'sockettp/client/connection_factory'
 
     class << self
       #
@@ -15,7 +15,7 @@ module Sockettp
 
         fail URI::BadURIError if !uri.is_a? URI::Sockettp
 
-        socket = ConnectionManager.connect uri.host, uri.port
+        socket = ConnectionFactory.connect uri.host, uri.port
 
         socket.puts uri.path
 

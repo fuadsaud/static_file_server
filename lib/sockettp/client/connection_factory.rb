@@ -7,7 +7,7 @@ module Sockettp
     # Connections are stored in the _connections_ hash, indexed by a host-port
     # hash.
     #
-    module ConnectionManager
+    module ConnectionFactory
       @@connections = {}
 
       class << self
