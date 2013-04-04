@@ -1,5 +1,6 @@
 module Sockettp
   module Client
+    autoload :Connection, 'sockettp/client/connection'
     autoload :ConnectionFactory, 'sockettp/client/connection_factory'
 
     class << self
@@ -15,15 +16,14 @@ module Sockettp
 
         fail URI::BadURIError if !uri.is_a? URI::Sockettp
 
-        socket = ConnectionFactory.connect uri.host, uri.port
+        connection = ConnectionFactory.connect uri.host, uri.port
 
-        socket.puts uri.path
 
         begin
-          response = socket.gets
+          response = connection.request uri.path
           JSON.parse(response)
         rescue
-          puts $!
+          puts $!.red
           raise "Couldn't reach #{uri.host}:#{uri.port}"
         end
       end
