@@ -1,0 +1,47 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.expand_path(File.join(File.dirname(__FILE__), '../lib'))
+
+require 'sockettp'
+require 'clik'
+require 'clik/ask'
+
+OPTIONS = {
+  dir: File.dirname(__FILE__),
+}
+
+def show_help
+  puts <<-HELP
+Usage: bundle exec sockettp server [-p --port PORT] [-d --dir DIR]
+       bundle exec sockettp client [-p --port PORT]
+
+The client is a REPL which takes the path of the required file - without the
+leading forward-slash - and prints aout the result.
+HELP
+end
+
+cli_options = {
+  '-p --port' => lambda {|p| OPTIONS[:port] = p },
+  '-h --help' => lambda { show_help; exit }
+}
+
+case ARGV.first
+when 'server'
+  cli cli_options.merge '-d --dir' => lambda {|d| OPTIONS[:dir]  = d }
+
+  if OPTIONS[:port]
+    Sockettp::Server.start(OPTIONS[:dir], OPTIONS[:port])
+  else
+    Sockettp::Server.start(OPTIONS[:dir])
+  end
+when 'client'
+  cli cli_options
+
+  loop do
+    url = "sockettp://0.0.0.0#{":#{OPTIONS[:port] ? OPTIONS[:port] : ''}"}/#{ask '>> '}"
+
+    puts Sockettp::Client.request(url).to_json
+  end
+else
+  show_help
+end
