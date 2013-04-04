@@ -4,7 +4,6 @@ $:.unshift File.expand_path(File.join(File.dirname(__FILE__), '../lib'))
 
 require 'sockettp'
 require 'clik'
-require 'clik/ask'
 
 OPTIONS = {
   dir: File.dirname(__FILE__),
@@ -38,7 +37,8 @@ when 'client'
   cli cli_options
 
   loop do
-    url = "sockettp://0.0.0.0#{":#{OPTIONS[:port] ? OPTIONS[:port] : ''}"}/#{ask '>> '}"
+    print '>> '
+    url = "sockettp://0.0.0.0#{":#{OPTIONS[:port] ? OPTIONS[:port] : ''}"}/#{STDIN.gets.chomp}"
 
     puts Sockettp::Client.request(url).to_json
   end

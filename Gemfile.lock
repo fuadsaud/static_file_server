@@ -1,11 +1,7 @@
-PATH
-  remote: ~/Code/Explore/clik
-  specs:
-    clik (0.1.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
+    clik (0.1.0)
     colored (1.2)
     rake (10.0.4)
 
@@ -13,6 +9,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  clik!
+  clik
   colored
   rake

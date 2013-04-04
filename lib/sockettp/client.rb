@@ -18,12 +18,11 @@ module Sockettp
 
         connection = ConnectionFactory.connect uri.host, uri.port
 
-
         begin
           response = connection.request uri.path
           JSON.parse(response)
         rescue
-          puts $!.red
+          puts $!
           raise "Couldn't reach #{uri.host}:#{uri.port}"
         end
       end
