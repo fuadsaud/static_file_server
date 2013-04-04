@@ -8,13 +8,11 @@ module Sockettp
       end
 
       def request(args)
-        begin
-          @socket.puts args
-          @socket.gets
-        rescue
-          @socket = TCPSocket.new @host, @port
-          retry
-        end
+        @socket.puts args
+        @socket.gets || fail
+      rescue
+        @socket = TCPSocket.new @host, @port
+        retry
       end
     end
   end
