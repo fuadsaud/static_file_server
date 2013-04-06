@@ -1,5 +1,3 @@
-require 'timeout'
-
 module Sockettp
   module Server
     #
@@ -25,7 +23,7 @@ module Sockettp
       #
       def loop!
         loop do
-          Timeout.timeout(5) { request? }
+          IO.select([@client], nil, nil, 2) or fail 'timeout'
 
           input = read_request
 
@@ -38,7 +36,7 @@ module Sockettp
           @client.puts(response.to_json)
         end
       ensure
-        puts '-' * 75 + " client disconnected #{$!.message}"
+        puts '-' * 75 + " client disconnected / #{$!.message}"
         @client.close
       end
 
@@ -55,6 +53,8 @@ module Sockettp
       #
       def read_request
         @client.gets.chomp
+      rescue
+        raise 'client closed connection'
       end
 
       #
