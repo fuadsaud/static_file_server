@@ -1,20 +1,20 @@
-module Sockettp
+module HTTP
   module Client
-    autoload :Connection, 'sockettp/client/connection'
-    autoload :ConnectionFactory, 'sockettp/client/connection_factory'
+    autoload :Connection, 'http/client/connection'
+    autoload :ConnectionFactory, 'http/client/connection_factory'
 
     class << self
       #
-      # Makes a request to a sockettp server.
+      # Makes a request to a http server.
       #
-      # _uri_ must be a valid Sockettp URI (with the sockettp: scheme), host
+      # _uri_ must be a valid HTTP URI (with the http: scheme), host
       # address and file path. Informing the port is optional, since it defaults
-      # to 9000 (see Sockettp and URI::Sockettp).
+      # to 9000 (see HTTP and URI::HTTP).
       #
       def request(uri)
         uri = URI(uri)
 
-        fail URI::BadURIError if !uri.is_a? URI::Sockettp
+        fail URI::BadURIError if !uri.is_a? URI::HTTP
 
         connection = ConnectionFactory.connect uri.host, uri.port
 

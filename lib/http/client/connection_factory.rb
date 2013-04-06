@@ -1,7 +1,7 @@
-module Sockettp
+module HTTP
   module Client
     #
-    # This module is responsible for the creation, and management of sockettp
+    # This module is responsible for the creation, and management of http
     # connections.
     #
     # Connections are stored in the _connections_ hash, indexed by a host-port

@@ -1,4 +1,4 @@
-module Sockettp
+module HTTP
   module Server
     #
     # This class is responsible for dealing with the client socket, reading the
@@ -31,7 +31,7 @@ module Sockettp
 
           response = build_response_for(body)
 
-          Server.log "#{@addrinfo.ip_address} #{input} -- #{response[:status]} #{Sockettp::STATUSES[response[:status]]}".send(response[:status] == 200 ? :green : :red)
+          Server.log "#{@addrinfo.ip_address} #{input} -- #{response[:status]} #{HTTP::STATUSES[response[:status]]}".send(response[:status] == 200 ? :green : :red)
 
           @client.puts(response.to_json)
         end
@@ -64,7 +64,7 @@ module Sockettp
         if body
           { status: 200, body: body }
         else
-          { status: 404, body: Sockettp::STATUSES[404] }
+          { status: 404, body: HTTP::STATUSES[404] }
         end
       end
     end

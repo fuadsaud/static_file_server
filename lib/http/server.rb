@@ -1,23 +1,23 @@
 require 'date'
 
-module Sockettp
+module HTTP
   #
-  # The sockettp server module
+  # The http server module
   #
   # It listens for new connections at the specified port and dispatches the
   # clients to the handlers objects.
   #
   module Server
-    autoload :ClientHandler, 'sockettp/server/client_handler'
+    autoload :ClientHandler, 'http/server/client_handler'
 
     class << self
-      def start(dir, port = Sockettp::DEFAULT_PORT)
+      def start(dir, port = HTTP::DEFAULT_PORT)
         fail "#{dir} doesn't exists or is't a directory" if !File.directory?(dir)
 
         @@dir = dir
         @@port = port
 
-        puts "Starting Sockettp server..."
+        puts "Starting HTTP server..."
         puts "Serving #{@@dir.yellow} on port #{@@port.to_s.green}"
 
         Socket.tcp_server_loop(@@port) do |socket, client_addrinfo|

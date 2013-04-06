@@ -1,4 +1,4 @@
-module Sockettp
+module HTTP
   module Client
     class Connection
       def initialize(host, port)
