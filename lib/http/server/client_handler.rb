@@ -1,5 +1,6 @@
 module HTTP
   module Server
+
     #
     # This class is responsible for dealing with the client socket, reading the
     # requests, writing the responses and monitoring connection timeouts.
@@ -8,6 +9,7 @@ module HTTP
     # and the response body.
     #
     class ClientHandler
+
       #
       # Receives the client socket and it's addrinfo object
       #
@@ -21,7 +23,7 @@ module HTTP
       # request), fetches the response content and writes it to the client
       # stream.
       #
-      def loop!
+      def loop
         loop do
           IO.select([@client], nil, nil, 2) or fail 'timeout'
 
@@ -41,12 +43,6 @@ module HTTP
       end
 
       private
-      #
-      # Check if there's a pending request from the client
-      #
-      def request?
-        return !@client.eof?
-      end
 
       #
       # Read the request string from the client

@@ -8,17 +8,18 @@ module HTTP
   # clients to the handlers objects.
   #
   module Server
+
     autoload :ClientHandler, 'http/server/client_handler'
 
     class << self
       def start(dir, port = HTTP::DEFAULT_PORT)
-        fail "#{dir} doesn't exists or is't a directory" if !File.directory?(dir)
+        fail "Cannot access #{dir} dir" unless File.directory?(dir)
 
         @@dir = dir
         @@port = port
 
-        puts "Starting HTTP server..."
-        puts "Serving #{@@dir.yellow} on port #{@@port.to_s.green}"
+        log "Starting HTTP server..."
+        log "Serving #{@@dir.yellow} on port #{@@port.to_s.green}"
 
         Socket.tcp_server_loop(@@port) do |socket, client_addrinfo|
           handle socket, client_addrinfo
@@ -34,8 +35,8 @@ module HTTP
       def content_for(path)
         path = File.join(@@dir, path)
 
-        return File.read(path) if File.file?(path)
-        return Dir[File.join(path, '*')] if File.directory?(path)
+        File.file?(path)      and return File.read(path)
+        File.directory?(path) and return Dir.glob(File.join(path, '*'))
       end
 
       #
@@ -47,6 +48,7 @@ module HTTP
       end
 
       private
+
       #
       # Dispatches the client socket to a ClientHandler
       #
@@ -54,7 +56,7 @@ module HTTP
         Thread.new(socket) do |client|
           log "New client connected"
 
-          ClientHandler.new(client, addrinfo).loop!
+          ClientHandler.new(client, addrinfo).loop
         end
       end
     end
