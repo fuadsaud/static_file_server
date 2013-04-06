@@ -9,7 +9,7 @@ module Sockettp
 
       def request(args)
         @socket.puts args
-        @socket.gets || fail
+        @socket.gets or fail
       rescue
         @socket = TCPSocket.new @host, @port
         retry
