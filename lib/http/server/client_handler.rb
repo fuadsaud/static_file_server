@@ -24,8 +24,8 @@ module HTTP
       # stream.
       #
       def loop
-        loop do
-          IO.select([@client], nil, nil, 2) or fail 'timeout'
+        Kernel.loop do
+          IO.select([@client], nil, nil, 5) or fail 'timeout'
 
           input = read_request
 
