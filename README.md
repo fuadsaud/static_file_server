@@ -9,6 +9,6 @@ A simple presistent HTTP implementation over sockets, for learning purposes
 
 ## TODO
 
-[] Content-Type handling
-[] Content-Length handling
-[] Better status code handling
+- [] Implement basic headers definition (Content-Type, Content-Lenght)
+- [] Make persistent connections work properly.
+- [] Better status code handling
