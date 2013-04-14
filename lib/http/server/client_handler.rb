@@ -1,3 +1,6 @@
+require 'http/server/request'
+require 'http/server/response'
+
 module HTTP
   module Server
 
@@ -27,18 +30,26 @@ module HTTP
         Kernel.loop do
           IO.select([@client], nil, nil, 5) or fail 'timeout'
 
-          input = read_request
+          request = Request.new(read_request)
 
-          body = Server.content_for(input)
+          body = Server.content_for(request.path)
 
-          response = build_response_for(body)
+          response = Response.new(Server::HTTP_VERSION, body ? 200 : 404, {
+            Connection: 'Keep-Alive',
+            Sever:      'fuad suad server',
+            Date:       DateTime.now
+          }, body)
 
-          Server.log "#{@addrinfo.ip_address} #{input} -- #{response[:status]} #{HTTP::STATUSES[response[:status]]}".send(response[:status] == 200 ? :green : :red)
+          status = response.status
 
-          @client.puts(response.to_json)
+          Server.log <<-LOG.send(status.code == 200 ? :green : :red)
+#{@addrinfo.ip_address} #{request.path} -- #{status.code} #{status.message}
+LOG
+
+          @client.puts(response.to_s)
         end
       ensure
-        puts '-' * 75 + " client disconnected / #{$!.message}"
+        puts '-' * 75 + " client disconnected / #{$!}"
         @client.close
       end
 
@@ -48,20 +59,17 @@ module HTTP
       # Read the request string from the client
       #
       def read_request
-        @client.gets.chomp
+        request = ''
+
+        Kernel.loop do
+          line = @client.gets
+          break if line.chomp.empty?
+          request << line
+        end
+
+        request
       rescue
         raise 'client closed connection'
-      end
-
-      #
-      # Builds a response hash given the response body
-      #
-      def build_response_for(body)
-        if body
-          { status: 200, body: body }
-        else
-          { status: 404, body: HTTP::STATUSES[404] }
-        end
       end
     end
   end
