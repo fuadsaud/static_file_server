@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= path %></title>
+</head>
+<body>
+  <div class="container">
+    <ul>
+      <% Dir.entries(path).each do |entry| %>
+      <li><a href="<%= File.join(relative_path, entry) %>"><%= entry %></a></li>
+      <% end %>
+    </ul>
+  </div>
+</body>
+</html>
