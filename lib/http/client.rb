@@ -16,8 +16,7 @@ module HTTP
       fail URI::BadURIError unless uri.is_a? URI::HTTP
 
       begin
-        response = connection(uri.host, uri.port).request uri.path
-        JSON.parse(response)
+        connection(uri.host, uri.port).request uri.path
       rescue
         puts $!
         raise "Couldn't reach #{uri.host}:#{uri.port}"
