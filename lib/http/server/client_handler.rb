@@ -1,5 +1,6 @@
 require 'http/server/request'
 require 'http/server/response'
+require 'http/server/content'
 
 module HTTP
   module Server
@@ -30,15 +31,15 @@ module HTTP
         Kernel.loop do
           IO.select([@client], nil, nil, 5) or fail 'timeout'
 
-          request = Request.new(read_request)
-
-          body = Server.content_for(request.path)
-
-          response = Response.new(Server::HTTP_VERSION, body ? 200 : 404, {
+          request  = Request.new(read_request)
+          content  = Content.new(request.path)
+          response = Response.new(Server::HTTP_VERSION, content ? 200 : 404, {
             Connection: 'Keep-Alive',
             Sever:      'fuad suad server',
-            Date:       DateTime.now
-          }, body)
+            Date:       DateTime.now.httpdate,
+            Host:       request.header["Host"],
+            :'Content-Lenght' => content.lenght
+          }, content.data)
 
           status = response.status
 
@@ -69,6 +70,7 @@ LOG
 
         request
       rescue
+        puts $!
         raise 'client closed connection'
       end
     end

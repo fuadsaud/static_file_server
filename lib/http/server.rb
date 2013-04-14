@@ -13,6 +13,9 @@ module HTTP
     autoload :ClientHandler, 'http/server/client_handler'
 
     class << self
+      def dir;  @@dir  end
+      def port; @@port end
+
       def start(dir, port = URI::HTTP::DEFAULT_PORT)
         fail "Cannot access #{dir} dir" unless File.directory?(dir)
 
@@ -25,19 +28,6 @@ module HTTP
         Socket.tcp_server_loop(@@port) do |socket, client_addrinfo|
           handle socket, client_addrinfo
         end
-      end
-
-      # Returns the file content for the given path
-      #
-      # If the path represents an ordinary file, the method just reads it's
-      # content. In case it's a directory, it returns an array containing the
-      # file entries in that dir. Retrurns nil in case the file doesn't exists.
-      #
-      def content_for(path)
-        path = File.join(@@dir, path)
-
-        File.file?(path)      and return File.read(path)
-        File.directory?(path) and return Dir.glob(File.join(path, '*'))
       end
 
       #
