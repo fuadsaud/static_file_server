@@ -33,12 +33,12 @@ module HTTP
 
           request  = Request.new(read_request)
           content  = Content.new(request.path)
-          response = Response.new(Server::HTTP_VERSION, content ? 200 : 404, {
+          response = Response.new(Server::HTTP_VERSION, content.data ? 200 : 404, {
             Connection: 'Keep-Alive',
             Sever:      'fuad suad server',
             Date:       DateTime.now.httpdate,
             Host:       request.header["Host"],
-            :'Content-Lenght' => content.lenght
+            :'Content-Length' => content.length
           }, content.data)
 
           status = response.status
@@ -50,7 +50,7 @@ LOG
           @client.puts(response.to_s)
         end
       ensure
-        puts '-' * 75 + " client disconnected / #{$!}"
+        Server.log "client disconnected / #{$!}".yellow
         @client.close
       end
 
@@ -70,7 +70,6 @@ LOG
 
         request
       rescue
-        puts $!
         raise 'client closed connection'
       end
     end
