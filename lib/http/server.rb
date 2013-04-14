@@ -11,6 +11,7 @@ module HTTP
     HTTP_VERSION = '1.1'
 
     autoload :ClientHandler, 'http/server/client_handler'
+    autoload :Logger,        'http/server/logger'
 
     class << self
       def dir;  @@dir  end
@@ -22,20 +23,12 @@ module HTTP
         @@dir = dir
         @@port = port
 
-        log "Starting HTTP server..."
-        log "Serving #{@@dir.yellow} on port #{@@port.to_s.green}"
+        Logger.log "Starting HTTP server..."
+        Logger.log "Serving #{@@dir.yellow} on port #{@@port.to_s.green}"
 
         Socket.tcp_server_loop(@@port) do |socket, client_addrinfo|
           handle socket, client_addrinfo
         end
-      end
-
-      #
-      # Logs a message to STDOUT, printing the current thread's id, the current
-      # time and the given message.
-      #
-      def log(msg)
-        puts "#{Thread.current} -- #{DateTime.now.to_s} -- #{msg}"
       end
 
       private
@@ -45,7 +38,7 @@ module HTTP
       #
       def handle(socket, addrinfo)
         Thread.new(socket) do |client|
-          log 'New client connected'
+          Logger.log 'New client connected'
 
           ClientHandler.new(client, addrinfo).loop
         end

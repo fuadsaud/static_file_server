@@ -43,14 +43,16 @@ module HTTP
 
           status = response.status
 
-          Server.log <<-LOG.send(status.code == 200 ? :green : :red)
-#{@addrinfo.ip_address} #{request.path} -- #{status.code} #{status.message}
-LOG
+          Logger.log(''.tap {|s|
+            s << "#{@addrinfo.ip_address} "
+            s << "#{request.path} --"
+            s << "#{status.code} #{status.message}"
+          }.send(status.code == 200 ? :green : :red))
 
           @client.puts(response.to_s)
         end
       ensure
-        Server.log "client disconnected / #{$!}".yellow
+        Logger.log "client disconnected / #{$!}".yellow
         @client.close
       end
 
