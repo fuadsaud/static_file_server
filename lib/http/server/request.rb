@@ -2,9 +2,7 @@ module HTTP
   module Server
     class Request
 
-      attr_reader :path
-      attr_reader :method
-      attr_reader :http_version
+      attr_reader :path, :method, :header, :http_version
 
       def initialize(raw_request)
         lines = raw_request.lines.to_a
@@ -19,16 +17,14 @@ module HTTP
       private
 
       def parse_header(raw)
-        header = Hash.new([].freeze)
+        header = {}
         field = nil
 
         raw.each_line do |line|
           case line
           when /^([A-Za-z0-9!\#$%&'*+\-.^_`|~]+):\s*(.*?)\s*\z/om
             field, value = $1, $2
-            field.downcase!
-            header[field] = [] unless header.has_key?(field)
-            header[field] << value
+            header[field] = value
           when /^\s+(.*?)\s*\z/om
             value = $1
             fail "bad header '#{line}'." unless field
@@ -39,11 +35,9 @@ module HTTP
           end
         end
 
-        header.each do |key, values|
-          values.each do |value|
-            value.strip!
-            value.gsub!(/\s+/, " ")
-          end
+        header.each do |key, value|
+          value.strip!
+          value.gsub!(/\s+/, " ")
         end
 
         header
