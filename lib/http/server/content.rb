@@ -9,11 +9,11 @@ module HTTP
 
         if File.file?(path)
           @data = File.read(path)
-        elsif Dir.directory?(path)
+        elsif File.directory?(path)
           @data = Dir.entries(path).to_s
         end
 
-        @length = @data.bytesize
+        @length = @data.bytesize if @data
       end
     end
   end
