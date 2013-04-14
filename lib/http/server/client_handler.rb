@@ -37,20 +37,17 @@ module HTTP
                                   content.data ? 200 : 404,
                                   request.header.merge({
             Connection: 'Keep-Alive',
-            Sever:      'Kick Ass HTTP Server',
+            Server:      'Kick Ass HTTP Server',
             Date:       DateTime.now.httpdate,
-            Host:       request.header["Host"],
             :'Content-Length' => content.length
-          }, content.data)
-
-          status = response.status
+          }), content.data)
 
           # Logs the current operation.
           Logger.log(''.tap {|s|
             s << "#{@addrinfo.ip_address} "
             s << "#{request.path} --"
-            s << "#{status.code} #{status.message}"
-          }.send(status.code == 200 ? :green : :red))
+            s << "#{response.status.code} #{response.status.message}"
+          }.send(response.status.code == 200 ? :green : :red))
 
           @client.puts(response.to_s)
         end

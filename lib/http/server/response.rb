@@ -28,15 +28,13 @@ module HTTP
       # Dumps the object to a string in a valid HTTP header format.
       #
       def to_s
-        response = "HTTP/#{@http_version} #{@status.code} #{@status.message}#{CRLF}"
+        string = "HTTP/#{@http_version} #{@status.code} #{@status.message}#{CRLF}"
 
         @header.each do |key, value|
-          response << "#{key}: #{value}#{CRLF}"
+          string << "#{key}: #{value}#{CRLF}"
         end
 
-        response << "#{CRLF}#{@body}"
-
-        response
+        string << "#{CRLF}#{@body}"
       end
     end
   end
