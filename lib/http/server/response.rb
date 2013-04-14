@@ -7,19 +7,19 @@ module HTTP
 
       include Utils
 
-      attr_accessor :version, :status, :headers
+      attr_accessor :version, :status, :header
 
-      def initialize(version, status, headers, body)
-        @version = '1.1'
+      def initialize(http_version, status, header, body)
+        @http_version = Server::HTTP_VERSION
         @status = Status[status]
-        @headers = headers
+        @header = header
         @body = body
       end
 
       def to_s
-        response = "HTTP/#{@version} #{@status.code} #{@status.message}#{CRLF}"
+        response = "HTTP/#{@http_version} #{@status.code} #{@status.message}#{CRLF}"
 
-        @headers.each do |key, value|
+        @header.each do |key, value|
           response << "#{key}: #{value}#{CRLF}"
         end
 
