@@ -12,7 +12,7 @@ module HTTP
     autoload :ClientHandler, 'http/server/client_handler'
 
     class << self
-      def start(dir, port = HTTP::DEFAULT_PORT)
+      def start(dir, port = URI::HTTP::DEFAULT_PORT)
         fail "Cannot access #{dir} dir" unless File.directory?(dir)
 
         @@dir = dir
