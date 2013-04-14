@@ -40,7 +40,7 @@ when 'client'
     print '>> '
     url = "http://0.0.0.0#{":#{OPTIONS[:port] ? OPTIONS[:port] : ''}"}/#{STDIN.gets.chomp}"
 
-    puts HTTP::Client.request(url).to_json
+    puts HTTP::Client.get(url).to_json
   end
 else
   show_help

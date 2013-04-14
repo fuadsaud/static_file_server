@@ -8,9 +8,9 @@ module HTTP
     #
     # _uri_ must be a valid HTTP URI (with the http: scheme), host
     # address and file path. Informing the port is optional, since it defaults
-    # to 9000 (see HTTP and URI::HTTP).
+    # to 80 (see HTTP and URI::HTTP).
     #
-    def self.request(uri)
+    def self.get(uri)
       uri = URI(uri)
 
       fail URI::BadURIError unless uri.is_a? URI::HTTP
