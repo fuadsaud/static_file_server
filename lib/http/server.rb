@@ -8,6 +8,7 @@ module HTTP
   # clients to the handlers objects.
   #
   module Server
+    HTTP_VERSION = '1.1'
 
     autoload :ClientHandler, 'http/server/client_handler'
 
@@ -54,7 +55,7 @@ module HTTP
       #
       def handle(socket, addrinfo)
         Thread.new(socket) do |client|
-          log "New client connected"
+          log 'New client connected'
 
           ClientHandler.new(client, addrinfo).loop
         end
