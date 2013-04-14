@@ -14,9 +14,15 @@ module HTTP
     autoload :Logger,        'http/server/logger'
 
     class << self
+
+      # Attribute readers fir dir and port.
       def dir;  @@dir  end
       def port; @@port end
 
+      #
+      # Starts the server in the given port, serving the given directory. It
+      # loops infinetly and is only stopped when the process receives a signal.
+      #
       def start(dir, port = URI::HTTP::DEFAULT_PORT)
         fail "Cannot access #{dir} dir" unless File.directory?(dir)
 
@@ -34,7 +40,7 @@ module HTTP
       private
 
       #
-      # Dispatches the client socket to a ClientHandler
+      # Dispatches the client socket to a ClientHandler.
       #
       def handle(socket, addrinfo)
         Thread.new(socket) do |client|

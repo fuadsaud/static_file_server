@@ -1,7 +1,17 @@
 module HTTP
   module Server
+
+    #
+    # Wraps an HTTP status code and message. Objects of this class shouldn't be
+    # mannually isntantiated, but recoverd via the [] method, which returns a
+    # Status object given a status code.
+    #
     class Status
 
+      #
+      # Factory method for statuses. Returns the Status object given a status
+      # code.
+      #
       def self.[](code)
         STATUSES[code]
       end
@@ -10,11 +20,17 @@ module HTTP
 
       private
 
+      #
+      # Initializes the object. Shouldn't be mannualy called.
+      #
       def initialize(code, message)
         @code = code
         @message = message
       end
 
+      #
+      # All valid HTTP statuses.
+      #
       STATUSES = {
         100 => new(100, 'Continue'),
         101 => new(101, 'Switching Protocols'),

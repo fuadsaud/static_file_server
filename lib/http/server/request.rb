@@ -1,5 +1,10 @@
 module HTTP
   module Server
+
+    #
+    # This class represents an HTTP request, wrapping the requested path, HTTP
+    # version, status, header and body.
+    #
     class Request
 
       attr_reader :path, :method, :header, :http_version
@@ -16,6 +21,10 @@ module HTTP
 
       private
 
+      #
+      # Parses an HTTP header string (from the second line on) and returns a
+      # hash.
+      #
       def parse_header(raw)
         header = {}
         field = nil

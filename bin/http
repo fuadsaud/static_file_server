@@ -6,7 +6,7 @@ require 'http'
 require 'clik'
 
 OPTIONS = {
-  dir: File.dirname(__FILE__),
+  dir: File.dirname(__FILE__), # Defaults to serving the current dir.
 }
 
 def show_help

@@ -33,9 +33,11 @@ module HTTP
 
           request  = Request.new(read_request)
           content  = Content.new(request.path)
-          response = Response.new(Server::HTTP_VERSION, content.data ? 200 : 404, {
+          response = Response.new(Server::HTTP_VERSION,
+                                  content.data ? 200 : 404,
+                                  request.header.merge({
             Connection: 'Keep-Alive',
-            Sever:      'fuad suad server',
+            Sever:      'Kick Ass HTTP Server',
             Date:       DateTime.now.httpdate,
             Host:       request.header["Host"],
             :'Content-Length' => content.length
@@ -43,6 +45,7 @@ module HTTP
 
           status = response.status
 
+          # Logs the current operation.
           Logger.log(''.tap {|s|
             s << "#{@addrinfo.ip_address} "
             s << "#{request.path} --"
