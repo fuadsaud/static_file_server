@@ -37,7 +37,7 @@ module HTTP
                                   content.data ? 200 : 404,
                                   request.header.merge({
             Connection: 'Keep-Alive',
-            Server:      'Kick Ass HTTP Server',
+            Server:     'Kick Ass HTTP Server',
             Date:       DateTime.now.httpdate,
             :'Content-Length' => content.length
           }), content.data)
@@ -49,12 +49,13 @@ module HTTP
             s << "#{response.status.code} #{response.status.message}"
           }.send(response.status.code == 200 ? :green : :red))
 
-          @client.puts(response.to_s)
+          write_response(response)
         end
       ensure
         Logger.log "client disconnected / #{$!}".yellow
         @client.close
       end
+
 
       private
 
@@ -73,6 +74,10 @@ module HTTP
         request
       rescue
         raise 'client closed connection'
+      end
+
+      def write_response(response)
+        @client.puts(response.to_s)
       end
     end
   end
