@@ -40,7 +40,7 @@ module HTTP
             value = $1
             fail "bad header '#{line}'." unless field
 
-            header[field][-1] << " " << value
+            header[field][-1] << ' ' << value
           else
             fail "bad header '#{line}'."
           end
@@ -48,7 +48,7 @@ module HTTP
 
         header.each do |key, value|
           value.strip!
-          value.gsub!(/\s+/, " ")
+          value.gsub!(/\s+/, ' ')
         end
 
         header

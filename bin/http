@@ -21,13 +21,13 @@ HELP
 end
 
 cli_options = {
-  '-p --port' => lambda {|p| OPTIONS[:port] = p },
-  '-h --help' => lambda { show_help; exit }
+  '-p --port' => ->(p) { OPTIONS[:port] = p },
+  '-h --help' => -> { show_help and exit }
 }
 
 case ARGV.first
 when 'server'
-  cli cli_options.merge '-d --dir' => lambda {|d| OPTIONS[:dir]  = d }
+  cli cli_options.merge '-d --dir' => ->(d) { OPTIONS[:dir]  = d }
 
   if OPTIONS[:port]
     HTTP::Server.start(OPTIONS[:dir], OPTIONS[:port])
@@ -39,7 +39,11 @@ when 'client'
 
   loop do
     print '>> '
-    url = "http://0.0.0.0#{":#{OPTIONS[:port] ? OPTIONS[:port] : ''}"}/#{STDIN.gets.chomp}"
+    url = ''.tap do |s|
+      s << 'http://0.0.0.0'
+      s << ":#{OPTIONS[:port]}" if OPTIONS[:port]
+      s << "/#{STDIN.gets.chomp}"
+    end
 
     puts HTTP::Client.get(url).to_json
   end

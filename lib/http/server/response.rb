@@ -7,8 +7,8 @@ module HTTP
   module Server
 
     #
-    # This class represents an HTTP response, wrapping the HTTP version, status,
-    # header and body.
+    # This class represents an HTTP response, wrapping the HTTP version,
+    # status, header and body.
     #
     class Response
 
@@ -30,7 +30,11 @@ module HTTP
       # Dumps the object to a string in a valid HTTP header format.
       #
       def to_s
-        string = "HTTP/#{@http_version} #{@status.code} #{@status.message}#{CRLF}"
+        string = ''.tap do |s|
+          s << "HTTP/#{@http_version} "
+          s << "#{@status.code} #{@status.message}"
+          s << CRLF
+        end
 
         @header.each do |key, value|
           string << "#{key}: #{value}#{CRLF}"

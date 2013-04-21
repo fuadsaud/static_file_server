@@ -11,8 +11,8 @@ module HTTP
     # This class is responsible for dealing with the client socket, reading the
     # requests, writing the responses and monitoring connection timeouts.
     #
-    # The response is a JSON encoded string with the status code for the request
-    # and the response body.
+    # The response is a JSON encoded string with the status code for the
+    # request and the response body.
     #
     class ClientHandler
 
@@ -45,11 +45,11 @@ module HTTP
           }), content.data)
 
           # Logs the current operation.
-          Logger.log(''.tap {|s|
+          Logger.log(''.tap do |s|
             s << "#{@addrinfo.ip_address} "
             s << "#{request.path} --"
             s << "#{response.status.code} #{response.status.message}"
-          }.send(response.status.code == 200 ? :green : :red))
+          end.send(response.status.code == 200 ? :green : :red))
 
           write_response(response)
         end

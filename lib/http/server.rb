@@ -17,9 +17,14 @@ module HTTP
 
     class << self
 
-      # Attribute readers fir dir and port.
-      def dir;  @@dir  end
-      def port; @@port end
+      # Attribute readers for dir and port.
+      def dir
+        @@dir
+      end
+
+      def port
+        @@port
+      end
 
       #
       # Starts the server in the given port, serving the given directory. It
@@ -31,7 +36,7 @@ module HTTP
         @@dir = dir
         @@port = port
 
-        Logger.log "Starting HTTP server..."
+        Logger.log 'Starting HTTP server...'
         Logger.log "Serving #{@@dir.yellow} on port #{@@port.to_s.green}"
 
         Socket.tcp_server_loop(@@port) do |socket, client_addrinfo|
