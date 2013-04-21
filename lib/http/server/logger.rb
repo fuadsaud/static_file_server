@@ -10,13 +10,10 @@ module HTTP
     #
     module Logger
 
-      module_function
-      def log(msg)
-        @@logger << "#{Thread.current} -- #{DateTime.now.to_s} -- #{msg}#{$/}"
-      end
+      @logger = ::Logger.new(STDOUT)
 
-      class << self
-        @@logger = ::Logger.new(STDOUT)
+      def self.log(msg)
+        @logger << "#{Thread.current} -- #{DateTime.now.to_s} -- #{msg}#{$/}"
       end
     end
   end

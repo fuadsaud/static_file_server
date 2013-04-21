@@ -19,11 +19,11 @@ module HTTP
 
       # Attribute readers for dir and port.
       def dir
-        @@dir
+        @dir
       end
 
       def port
-        @@port
+        @port
       end
 
       #
@@ -33,13 +33,13 @@ module HTTP
       def start(dir, port = URI::HTTP::DEFAULT_PORT)
         fail "Cannot access #{dir} dir" unless File.directory?(dir)
 
-        @@dir = dir
-        @@port = port
+        @dir = dir
+        @port = port
 
         Logger.log 'Starting HTTP server...'
-        Logger.log "Serving #{@@dir.yellow} on port #{@@port.to_s.green}"
+        Logger.log "Serving #{@dir.yellow} on port #{@port.to_s.green}"
 
-        Socket.tcp_server_loop(@@port) do |socket, client_addrinfo|
+        Socket.tcp_server_loop(@port) do |socket, client_addrinfo|
           handle socket, client_addrinfo
         end
       end
