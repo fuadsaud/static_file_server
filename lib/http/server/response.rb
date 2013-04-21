@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 require 'http/server/status'
 require 'http/server/utils'
 

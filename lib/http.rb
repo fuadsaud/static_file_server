@@ -1,3 +1,5 @@
+# encoding: UTF-8
+
 $:.unshift File.dirname(__FILE__) # For testing
 
 require 'json'
