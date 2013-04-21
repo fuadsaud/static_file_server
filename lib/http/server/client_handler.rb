@@ -1,9 +1,9 @@
 module HTTP
   module Server
 
-    autoload :Request,  'http/server/request'
-    autoload :Response, 'http/server/response'
-    autoload :Content,  'http/server/content'
+    require 'http/server/request'
+    require 'http/server/response'
+    require 'http/server/content'
 
     #
     # This class is responsible for dealing with the client socket, reading the

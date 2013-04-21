@@ -10,8 +10,8 @@ module HTTP
   module Server
     HTTP_VERSION = '1.1'
 
-    autoload :ClientHandler, 'http/server/client_handler'
-    autoload :Logger,        'http/server/logger'
+    require 'http/server/client_handler'
+    require 'http/server/logger'
 
     class << self
 

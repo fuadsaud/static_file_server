@@ -6,11 +6,11 @@ require 'colored'
 
 module HTTP
 
+  require 'http/client'
+  require 'http/server'
+
   STATUSES = {
     200 => 'OK',
     404 => 'Not found'
   }
-
-  autoload :Client, 'http/client'
-  autoload :Server, 'http/server'
 end

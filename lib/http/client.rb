@@ -1,7 +1,7 @@
 module HTTP
   module Client
 
-    autoload :Connection, 'http/client/connection'
+    require 'http/client/connection'
 
     #
     # Makes a request to an http server.
