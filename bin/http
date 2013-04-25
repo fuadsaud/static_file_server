@@ -1,13 +1,13 @@
 #!/usr/bin/env ruby
 # encoding: UTF-8
 
-$LOAD_PATH.unshift File.expand_path(File.join(File.dirname(__FILE__), '../lib'))
+$LOAD_PATH.unshift File.expand_path(File.join(__dir__, '../lib'))
 
 require 'http'
 require 'clik'
 
 OPTIONS = {
-  dir: File.dirname(__FILE__), # Defaults to serving the current dir.
+  dir: __dir__ # Defaults to serving the current dir.
 }
 
 def show_help
