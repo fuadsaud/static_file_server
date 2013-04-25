@@ -1,6 +1,6 @@
 # encoding: UTF-8
 
-$:.unshift File.dirname(__FILE__) # For testing
+$LOAD_PATH.unshift File.dirname(__FILE__) # For testing
 
 require 'json'
 require 'socket'
