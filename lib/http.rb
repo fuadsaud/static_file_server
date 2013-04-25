@@ -8,7 +8,6 @@ require 'colored'
 
 module HTTP
 
-  require 'http/client'
   require 'http/server'
 
   STATUSES = {

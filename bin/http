@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 # encoding: UTF-8
 
-$:.unshift File.expand_path(File.join(File.dirname(__FILE__), '../lib'))
+$LOAD_PATH.unshift File.expand_path(File.join(File.dirname(__FILE__), '../lib'))
 
 require 'http'
 require 'clik'
@@ -11,42 +11,15 @@ OPTIONS = {
 }
 
 def show_help
-  puts <<-HELP
-Usage: bundle exec http server [-p --port PORT] [-d --dir DIR]
-       bundle exec http client [-p --port PORT]
-
-The client is a REPL which takes the path of the required file - without the
-leading forward-slash - and prints aout the result.
-HELP
+  puts 'Usage: bundle exec http [-p --port PORT] [-d --dir DIR]'
 end
 
-cli_options = {
-  '-p --port' => ->(p) { OPTIONS[:port] = p },
-  '-h --help' => -> { show_help and exit }
-}
+cli '-p --port' => ->(p) { OPTIONS[:port] = p },
+    '-d --dir'  => ->(d) { OPTIONS[:dir]  = d },
+    '-h --help' => ->    { show_help and exit }
 
-case ARGV.first
-when 'server'
-  cli cli_options.merge '-d --dir' => ->(d) { OPTIONS[:dir]  = d }
-
-  if OPTIONS[:port]
-    HTTP::Server.start(OPTIONS[:dir], OPTIONS[:port])
-  else
-    HTTP::Server.start(OPTIONS[:dir])
-  end
-when 'client'
-  cli cli_options
-
-  loop do
-    print '>> '
-    url = ''.tap do |s|
-      s << 'http://0.0.0.0'
-      s << ":#{OPTIONS[:port]}" if OPTIONS[:port]
-      s << "/#{STDIN.gets.chomp}"
-    end
-
-    puts HTTP::Client.get(url).to_json
-  end
+if OPTIONS[:port]
+  HTTP::Server.start(OPTIONS[:dir], OPTIONS[:port])
 else
-  show_help
+  HTTP::Server.start(OPTIONS[:dir])
 end
