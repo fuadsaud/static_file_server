@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
 
 gem 'rake'
-gem 'colored'
+gem 'cape-cod'
 gem 'clik'

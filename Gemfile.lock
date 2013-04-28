@@ -1,14 +1,14 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    cape-cod (0.1.1)
     clik (0.1.0)
-    colored (1.2)
     rake (10.0.4)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  cape-cod
   clik
-  colored
   rake
