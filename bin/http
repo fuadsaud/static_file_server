@@ -6,6 +6,19 @@ $LOAD_PATH.unshift File.expand_path(File.join(__dir__, '../lib'))
 require 'http'
 require 'clik'
 
+# Trap SIGINT
+force_exit = false
+
+Signal.trap(:INT) do
+  exit 1 if force_exit
+
+  force_exit = true
+
+  puts "\nStopping server... interrupt again to exit immediatly".red
+  HTTP::Server.stop
+  exit 0
+end
+
 OPTIONS = {
   dir: __dir__ # Defaults to serving the current dir.
 }

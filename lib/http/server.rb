@@ -21,6 +21,7 @@ module HTTP
       attr_reader :dir
       attr_reader :port
 
+      @status = :stopped
 
       #
       # Starts the server in the given port, serving the given directory. It
@@ -31,13 +32,27 @@ module HTTP
 
         @dir = dir
         @port = port
+        @handlers = ThreadGroup.new
 
         Logger.log 'Starting HTTP server...'
         Logger.log "Serving #{@dir.yellow} on port #{@port.to_s.green}"
 
-        Socket.tcp_server_loop(@port) do |socket, client_addrinfo|
-          handle socket, client_addrinfo
+        @status = :running
+
+        @loop_thread = Thread.new do
+          Socket.tcp_server_loop(@port) do |socket, client_addrinfo|
+            handle socket, client_addrinfo
+          end
         end
+
+        @loop_thread.join
+      end
+
+      def stop
+        @handlers.list.each(&:exit)
+        @loop_thread.exit
+        @loop_thread = nil
+        @status = :stopped
       end
 
       private
@@ -46,11 +61,11 @@ module HTTP
       # Dispatches the client socket to a ClientHandler.
       #
       def handle(socket, addrinfo)
-        Thread.new(socket) do |client|
+        @handlers.add(Thread.new(socket) do |client|
           Logger.log 'New client connected'
 
           ClientHandler.new(client, addrinfo).loop
-        end
+        end)
       end
     end
   end
