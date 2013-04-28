@@ -18,13 +18,9 @@ module HTTP
     class << self
 
       # Attribute readers for dir and port.
-      def dir
-        @dir
-      end
+      attr_reader :dir
+      attr_reader :port
 
-      def port
-        @port
-      end
 
       #
       # Starts the server in the given port, serving the given directory. It
