@@ -14,12 +14,7 @@ require 'cape-cod'
 # clients to the handlers objects.
 #
 module StaticFileServer
-  HTTP_VERSION = '1.1'
-
-  HTTP_STATUSES = {
-    200 => 'OK',
-    404 => 'Not found'
-  }
+  HTTP_VERSION = 'HTTP/1.1'
 
   require 'static_file_server/core_ext/string'
   require 'static_file_server/client_handler'

@@ -36,7 +36,7 @@ module StaticFileServer
         puts request.header.to_s.magenta.on_white
 
         content  = Content.new(request.path)
-        response = Response.new(StaticFileServer::HTTP_VERSION,
+        response = Response.new(request.http_version,
                                 content.data ? 200 : 404,
                                 request.header.merge({
           Connection: 'Keep-Alive',
