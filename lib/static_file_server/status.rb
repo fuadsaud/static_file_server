@@ -7,7 +7,7 @@ module StaticFileServer
   # mannually isntantiated, but recoverd via the [] method, which returns a
   # Status object given a status code.
   #
-  class Status
+  class Status < Exception
 
     #
     # Factory method for statuses. Returns the Status object given a status
