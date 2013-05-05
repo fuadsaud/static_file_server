@@ -61,10 +61,10 @@ module HTTP
       # Dispatches the client socket to a ClientHandler.
       #
       def handle(socket, addrinfo)
-        @handlers.add(Thread.new(socket) do |client|
+        @handlers.add(Thread.new(socket, addrinfo) do |client, _addrinfo|
           Logger.log 'New client connected'
 
-          ClientHandler.new(client, addrinfo).loop
+          ClientHandler.new(client, _addrinfo).loop
         end)
       end
     end
