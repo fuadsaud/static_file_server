@@ -35,15 +35,7 @@ module StaticFileServer
 
         puts request.header.to_s.magenta.on_white
 
-        content  = Content.new(request.path)
-        response = Response.new(request.http_version,
-                                content.data ? 200 : 404,
-                                request.header.merge({
-          Connection: 'Keep-Alive',
-          Server:     'Kick Ass Static File HTTP Server',
-          Date:       DateTime.now.httpdate,
-          :'Content-Length' => content.length
-        }), content.data)
+        response = Response.from_request(request)
 
         # Logs the current operation.
         Logger.log(''.tap do |s|

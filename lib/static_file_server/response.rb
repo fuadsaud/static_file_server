@@ -41,5 +41,20 @@ module StaticFileServer
 
       string << "#{CRLF}#{@body}"
     end
+
+    def self.from_request(request)
+      content = Content.new(request.path)
+
+      status = content.data ? 200 : 404
+
+      connection = request.http_version == 'HTTP/1.1' ? 'Keep-Alive' : 'Close'
+
+      Response.new(request.http_version, status, request.header.merge({
+        Connection: connection,
+        Server:     StaticFileServer::SERVER_NAME,
+        Date:       DateTime.now.httpdate,
+        :'Content-Length' => content.length
+      }), content.data)
+    end
   end
 end
