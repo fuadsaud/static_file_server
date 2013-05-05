@@ -1,6 +1,7 @@
 # encoding: UTF-8
 
 module StaticFileServer
+  require 'static_file_server/status'
   require 'static_file_server/request'
   require 'static_file_server/response'
   require 'static_file_server/content'
@@ -33,16 +34,14 @@ module StaticFileServer
 
         request  = Request.new(read_request)
 
-        puts request.header.to_s.magenta.on_white
-
         response = Response.from_request(request)
 
         # Logs the current operation.
         Logger.log(''.tap do |s|
           s << "#{@addrinfo.ip_address} "
-          s << "#{request.path} --"
+          s << "#{request.path} -- "
           s << "#{response.status.code} #{response.status.message}"
-        end.send(response.status.code == 200 ? :green : :red))
+        end.send(Utils.color_for_status(response.status)))
 
         write_response(response)
       end

@@ -1,6 +1,5 @@
 # encoding: UTF-8
 
-require 'static_file_server/status'
 require 'static_file_server/utils'
 
 module StaticFileServer
