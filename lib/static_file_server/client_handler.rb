@@ -33,7 +33,6 @@ module StaticFileServer
         IO.select([@client], nil, nil, 5) or fail 'timeout'
 
         request  = Request.new(read_request)
-
         response = Response.from_request(request)
 
         # Logs the current operation.

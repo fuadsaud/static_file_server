@@ -17,10 +17,11 @@ module StaticFileServer
     #
     # Initializes the object with the given parameters.
     #
-    def initialize(http_version = StaticFileServer::HTTP_VERSION,
-                   status, header, body)
+    def initialize(status, header,
+                    http_version = StaticFileServer::HTTP_VERSION, body = '')
+
       @http_version = http_version
-      @status = Status[status]
+      @status = status
       @header = header
       @body = body
     end
@@ -43,18 +44,30 @@ module StaticFileServer
     end
 
     def self.from_request(request)
-      content = Content.new(request.path)
+      header = {
+        Date:       Time.now.httpdate,
+        Server:     StaticFileServer::SERVER_NAME,
+      }
 
-      status = content.data ? 200 : 404
+      if request.header['If-Modified-Since']
+        if_modified_since = Time.httpdate(request.header['If-Modified-Since'])
+      end
+
+      content = Content.new(request.path, if_modified_since)
 
       connection = request.http_version == 'HTTP/1.1' ? 'Keep-Alive' : 'Close'
 
-      Response.new(request.http_version, status, request.header.merge({
+      header.merge!({
+        Etag:       content.etag,
         Connection: connection,
-        Server:     StaticFileServer::SERVER_NAME,
-        Date:       DateTime.now.httpdate,
-        :'Content-Length' => content.length
-      }), content.data)
+        :'Last-Modified'  => content.modification_time.httpdate,
+        :'Content-Length' => content.length,
+      })
+
+      new(Status.new(200, 'OK') , header, request.http_version, content.data)
+
+    rescue Status => e
+      new(e, header, request.http_version)
     end
   end
 end
