@@ -5,10 +5,9 @@ require 'erb'
 module StaticFileServer
   class Content
 
-    DIR_LISTING_TEMPLATE_PATH = File.join(File.dirname(__FILE__),
-                                          'dir_listing.erb')
-
-    DIR_LISTING_TEMPLATE = File.read(DIR_LISTING_TEMPLATE_PATH)
+    DIR_LISTING_TEMPLATE = File.read(
+                             File.join(
+                               File.dirname(__FILE__), 'dir_listing.erb'))
 
     attr_reader :data, :length
 
