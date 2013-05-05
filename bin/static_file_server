@@ -3,7 +3,7 @@
 
 $LOAD_PATH.unshift File.expand_path(File.join(__dir__, '../lib'))
 
-require 'http'
+require 'static_file_server'
 require 'clik'
 
 # Trap SIGINT
@@ -15,7 +15,7 @@ Signal.trap(:INT) do
   force_exit = true
 
   puts "\nStopping server... interrupt again to exit immediatly".red
-  HTTP::Server.stop
+  StaticFileServer.stop
   exit 0
 end
 
@@ -32,7 +32,7 @@ cli '-p --port' => ->(p) { OPTIONS[:port] = p },
     '-h --help' => ->    { show_help and exit }
 
 if OPTIONS[:port]
-  HTTP::Server.start(OPTIONS[:dir], OPTIONS[:port])
+  StaticFileServer.start(OPTIONS[:dir], OPTIONS[:port])
 else
-  HTTP::Server.start(OPTIONS[:dir])
+  StaticFileServer.start(OPTIONS[:dir])
 end
