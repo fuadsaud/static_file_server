@@ -7,5 +7,13 @@ module StaticFileServer
   #
   module Utils
     CRLF = "\r\n"
+
+    def self.color_for_status(status)
+      case status.code
+      when 100...300 then :green
+      when 300...400 then :cyan
+      when 400...505 then :red
+      end
+    end
   end
 end
