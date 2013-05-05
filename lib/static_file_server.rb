@@ -14,11 +14,14 @@ require 'cape-cod'
 # clients to the handlers objects.
 #
 module StaticFileServer
-  HTTP_VERSION = 'HTTP/1.1'
-
   require 'static_file_server/core_ext/string'
-  require 'static_file_server/client_handler'
+  require 'static_file_server/version'
   require 'static_file_server/logger'
+  require 'static_file_server/client_handler'
+
+  SERVER_NAME = "Kick Ass Server/#{VERSION} Ruby/#{RbConfig::CONFIG['ruby_version']}"
+
+  HTTP_VERSION = 'HTTP/1.1'
 
   class << self
 
