@@ -19,7 +19,11 @@ module StaticFileServer
   require 'static_file_server/logger'
   require 'static_file_server/client_handler'
 
-  SERVER_NAME = "Kick Ass Server/#{VERSION} Ruby/#{RbConfig::CONFIG['ruby_version']}"
+  SERVER_NAME = ''.tap do |s|
+    s << "Kick Ass Server/#{VERSION}"
+    s << ' '
+    s << "Ruby/#{RbConfig::CONFIG['ruby_version']}"
+  end
 
   HTTP_VERSION = 'HTTP/1.1'
 

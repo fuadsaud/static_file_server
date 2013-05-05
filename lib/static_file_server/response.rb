@@ -18,7 +18,8 @@ module StaticFileServer
     #
     # Initializes the object with the given parameters.
     #
-    def initialize(http_version = StaticFileServer::HTTP_VERSION, status, header, body)
+    def initialize(http_version = StaticFileServer::HTTP_VERSION,
+                   status, header, body)
       @http_version = http_version
       @status = Status[status]
       @header = header
