@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 # encoding: UTF-8
 
-$LOAD_PATH.unshift File.expand_path(File.join(__dir__, '../lib'))
+$LOAD_PATH.unshift File.expand_path(
+                     File.join(File.dirname(__FILE__), '../lib'))
 
 require 'static_file_server'
 require 'clik'
@@ -20,7 +21,7 @@ Signal.trap(:INT) do
 end
 
 OPTIONS = {
-  dir: __dir__ # Defaults to serving the current dir.
+  dir: File.dirname(__FILE__) # Defaults to serving the current dir.
 }
 
 def show_help
