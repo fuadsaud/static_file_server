@@ -3,7 +3,6 @@
 $LOAD_PATH.unshift File.dirname(__FILE__) # For testing
 
 require 'time'
-require 'json'
 require 'socket'
 require 'cape-cod'
 
