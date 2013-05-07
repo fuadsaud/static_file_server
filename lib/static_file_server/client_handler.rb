@@ -30,7 +30,7 @@ module StaticFileServer
     #
     def loop
       Kernel.loop do
-        IO.select([@client], nil, nil, 5) or fail 'timeout'
+        IO.select([@client], nil, nil, 5) or fail TimeoutError
 
         request  = Request.new(read_request)
         response = Response.from_request(request)
@@ -45,7 +45,7 @@ module StaticFileServer
         write_response(response)
       end
     ensure
-      Logger.log "client disconnected / #{$!}".yellow
+      Logger.log "client disconnected / #{$!.inspect}".yellow
       @client.close
     end
 

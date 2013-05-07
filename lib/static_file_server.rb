@@ -18,8 +18,10 @@ module StaticFileServer
   require 'static_file_server/logger'
   require 'static_file_server/client_handler'
 
+  class TimeoutError < StandardError; end
+
   SERVER_NAME = ''.tap do |s|
-    s << "Kick Ass Server/#{VERSION}"
+    s << "Kick Ass Static File Server/#{VERSION}"
     s << ' '
     s << "Ruby/#{RbConfig::CONFIG['ruby_version']}"
   end
