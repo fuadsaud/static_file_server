@@ -20,19 +20,17 @@ module StaticFileServer
     def self.from_filesystem(relative_path, modified_since)
       path = File.join(StaticFileServer.dir, relative_path)
 
-      if File.file?(path)
-        if modified_since && modified_since <= File.mtime(path)
-          raise Status[304]
-        end
+      raise Status[404] unless File.exist(path)
 
-        new(File.read(path), File.mtime(path))
+      raise Status[304] if modified_since && modified_since <= File.mtime(path)
+
+      data = if File.file?(path)
+        File.read(path)
       elsif File.directory?(path)
-        data = ERB.new(DIR_LISTING_TEMPLATE).result(binding)
-        new(data)
-      else
-        raise Status[404]
+        ERB.new(DIR_LISTING_TEMPLATE).result(binding)
       end
 
+      new(data, File.mtime(path))
     end
   end
 end
