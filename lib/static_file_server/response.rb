@@ -6,7 +6,8 @@ module StaticFileServer
 
   #
   # This class represents an HTTP response, wrapping the HTTP version,
-  # status, header and body.
+  # status, header and body. It is not responsible for any domain logic,
+  # only for carrying data around a generating it's string represention.
   #
   class Response
 
@@ -17,8 +18,7 @@ module StaticFileServer
     #
     # Initializes the object with the given parameters.
     #
-    def initialize(status, header,
-                    http_version = StaticFileServer::HTTP_VERSION, body = '')
+    def initialize(status, header, http_version, body = '')
 
       @http_version = http_version
       @status = status
@@ -43,31 +43,37 @@ module StaticFileServer
       string << "#{CRLF}#{@body}"
     end
 
-    def self.from_request(request)
+    def self.build(status = Status[200],
+                   header = {},
+                   http_version = StaticFileServer::HTTP_VERSION,
+                   content)
       header = {
         Date:       Time.now.httpdate,
         Server:     StaticFileServer::SERVER_NAME,
-      }
+        Connection: http_version == 'HTTP/1.1' ? 'Keep-Alive' : 'Close',
+        :'Last-Modified'  => content.modification_time.httpdate,
+        :'Content-Length' => content.length,
+      }.merge(header)
 
+      new(status, header, http_version, content.data)
+    end
+
+    #
+    # Factory method for creating an HTTP response from an HTTP request.
+    # It tries to create a Content object from the +request+ path
+    # possible
+    #
+    def self.from_request(request)
       if request.header['If-Modified-Since']
         if_modified_since = Time.httpdate(request.header['If-Modified-Since'])
       end
 
-      content = Content.new(request.path, if_modified_since)
+      content = Content.from_filesystem(request.path, if_modified_since)
 
-      connection = request.http_version == 'HTTP/1.1' ? 'Keep-Alive' : 'Close'
-
-      header.merge!({
-        Etag:       content.etag,
-        Connection: connection,
-        :'Last-Modified'  => content.modification_time.httpdate,
-        :'Content-Length' => content.length,
-      })
-
-      new(Status.new(200, 'OK') , header, request.http_version, content.data)
+      build(Status[200], {}, request.http_version, content)
 
     rescue Status => e
-      new(e, header, request.http_version)
+      build(e, {}, request.http_version, Content.new("#{e.code} #{e.message}"))
     end
   end
 end
