@@ -53,6 +53,7 @@ module StaticFileServer
         Connection: http_version == 'HTTP/1.1' ? 'Keep-Alive' : 'Close',
         :'Last-Modified'  => content.modification_time.httpdate,
         :'Content-Length' => content.length,
+        :'Content-Type' => content.type,
       }.merge(header)
 
       new(status, header, http_version, content.data)
