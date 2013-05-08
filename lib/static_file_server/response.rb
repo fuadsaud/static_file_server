@@ -78,7 +78,7 @@ module StaticFileServer
       build(Status[200], header, request.http_version, content)
 
     rescue Status => e
-      build(e, {}, request.http_version, Content.new("#{e.code} #{e.message}"))
+      build(e, {}, request.http_version, Content.new("#{e.code} #{e.message}", 'text/plain'))
     end
   end
 end
