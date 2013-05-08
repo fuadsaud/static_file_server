@@ -25,12 +25,12 @@ OPTIONS = {
 }
 
 def show_help
-  puts 'Usage: bundle exec http [-p --port PORT] [-d --dir DIR]'
+  puts 'Usage: bundle exec static_file_server [-p --port PORT] [-d --dir DIR]'
 end
 
 cli '-p --port' => ->(p) { OPTIONS[:port] = p },
     '-d --dir'  => ->(d) { OPTIONS[:dir]  = d },
-    '-h --help' => ->    { show_help and exit }
+    '-h --help' => ->    { show_help; exit }
 
 if OPTIONS[:port]
   StaticFileServer.start(OPTIONS[:dir], OPTIONS[:port])
