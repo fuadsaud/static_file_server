@@ -41,6 +41,8 @@ module StaticFileServer
     # loops infinetly and is only stopped when the process receives a signal.
     #
     def start(dir, port = URI::HTTP::DEFAULT_PORT)
+      return if @status == :running
+
       fail "Cannot access #{dir} dir" unless File.directory?(dir)
 
       @dir = dir
@@ -62,6 +64,7 @@ module StaticFileServer
     end
 
     def stop
+      return if @status == :stopped
       @handlers.list.each(&:exit)
       @loop_thread.exit
       @loop_thread = nil
