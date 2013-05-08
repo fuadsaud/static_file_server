@@ -17,16 +17,19 @@ module StaticFileServer
       STATUSES[code]
     end
 
-    attr_reader :code, :message
+    attr_reader :code, :message, :has_body
+
+    alias_method :has_body?, :has_body
 
     private
 
     #
     # Initializes the object. Shouldn't be mannualy called.
     #
-    def initialize(code, message)
+    def initialize(code, message, has_body = true)
       @code = code
       @message = message
+      @has_body = has_body
     end
 
     #
@@ -39,16 +42,16 @@ module StaticFileServer
       201 => new(201, 'Created'),
       202 => new(202, 'Accepted'),
       203 => new(203, 'Non-Authoritative Information'),
-      204 => new(204, 'No Content'),
+      204 => new(204, 'No Content', false),
       205 => new(205, 'Reset Content'),
       206 => new(206, 'Partial Content'),
-      300 => new(300, 'Multiple Choices'),
-      301 => new(301, 'Moved Permanently'),
-      302 => new(302, 'Found'),
-      303 => new(303, 'See Other'),
-      304 => new(304, 'Not Modified'),
-      305 => new(305, 'Use Proxy'),
-      307 => new(307, 'Temporary Redirect'),
+      300 => new(300, 'Multiple Choices', false),
+      301 => new(301, 'Moved Permanently', false),
+      302 => new(302, 'Found', false),
+      303 => new(303, 'See Other', false),
+      304 => new(304, 'Not Modified', false),
+      305 => new(305, 'Use Proxy', false),
+      307 => new(307, 'Temporary Redirect', false),
       400 => new(400, 'Bad Request'),
       401 => new(401, 'Unauthorized'),
       402 => new(402, 'Payment Required'),

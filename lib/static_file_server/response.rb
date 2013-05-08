@@ -51,12 +51,19 @@ module StaticFileServer
         Date:       Time.now.httpdate,
         Server:     StaticFileServer::SERVER_NAME,
         Connection: http_version == 'HTTP/1.1' ? 'Keep-Alive' : 'Close',
-        :'Last-Modified'  => content.modification_time.httpdate,
-        :'Content-Length' => content.length,
-        :'Content-Type' => content.type,
       }.merge(header)
 
-      new(status, header, http_version, content.data)
+      if content
+        header.merge!({
+          :'Last-Modified'  => content.modification_time.httpdate,
+          :'Content-Length' => content.length,
+          :'Content-Type'   => content.type
+        })
+
+        data = content.data
+      end
+
+      new(status, header, http_version, data)
     end
 
     #
@@ -78,7 +85,11 @@ module StaticFileServer
       build(Status[200], header, request.http_version, content)
 
     rescue Status => e
-      build(e, {}, request.http_version, Content.new("#{e.code} #{e.message}", 'text/plain'))
+      content = if e.has_body?
+        Content.new("#{e.code} #{e.message}", 'text/plain')
+      end
+
+      build(e, {}, request.http_version, content)
     end
   end
 end
