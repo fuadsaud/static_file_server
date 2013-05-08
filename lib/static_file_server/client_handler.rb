@@ -43,6 +43,8 @@ module StaticFileServer
         end.send(Utils.color_for_status(response.status)))
 
         write_response(response)
+
+        break if response.header[:Connection] == 'close'
       end
     ensure
       Logger.log "client disconnected / #{$!.inspect}".yellow
