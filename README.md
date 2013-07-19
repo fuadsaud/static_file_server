@@ -1,7 +1,7 @@
 http
 ========
 
-A simple presistent HTTP implementation unsing ruby sockets, for learning purposes
+A simple presistent HTTP implementation using ruby sockets, for learning purposes
 
 ## Running
 
@@ -9,4 +9,4 @@ A simple presistent HTTP implementation unsing ruby sockets, for learning purpos
 
 ## TODO
 
-- [] Better status code handling
+- [ ] Better status code handling
