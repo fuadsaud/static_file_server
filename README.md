@@ -1,4 +1,4 @@
-http
+static_file_server
 ========
 
 A simple presistent HTTP implementation using ruby sockets, for learning purposes
